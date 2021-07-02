@@ -1,0 +1,40 @@
+CREATE DEFINER=`root`@`localhost` TRIGGER `mobil1`.`messages_BEFORE_UPDATE` BEFORE UPDATE ON `messages` FOR EACH ROW
+BEGIN
+declare mysubcat varchar(45);
+declare mycat varchar(45);
+
+ 
+select subcatcode from failure where failurecode=new.fcode into mysubcat;
+select catcode from subcat where subcatcode=mysubcat into mycat;
+
+set new.fsubcat=mysubcat;
+set new.fcatcode=mycat;
+
+
+END
+
+
+///befor insert
+CREATE DEFINER=`root`@`localhost` TRIGGER `mobil1`.`messages_BEFORE_INSERT` BEFORE INSERT ON `messages` FOR EACH ROW
+BEGIN
+
+declare dlast datetime;
+declare dto datetime;
+declare mysubcat varchar(45);
+declare mycat varchar(45);
+
+ 
+select subcatcode from failure where failurecode=new.fcode into mysubcat;
+select catcode from subcat where subcatcode=mysubcat into mycat;
+select date from messages where mid=new.mid  order by id desc limit 1 into dlast;
+
+
+set new.lastperiod=timediff(new.date,dlast);
+set new.fsubcat=mysubcat;
+set new.fcatcode=mycat;
+
+
+
+
+
+END
