@@ -155,7 +155,7 @@ runmode:'',
    created(){
   //this.getlastppd();
   //this.Getrunmode();
-   this.Getmessages();
+  // this.Getmessages();
   //  ReportService.getlastmode().then(result => {
   //    this.mybatch = result.data;
   //          })
@@ -168,10 +168,10 @@ runmode:'',
    },
     mounted (){
  
-  this.getlastppd();
-  this.checkbatch();
+  setTimeout(this.getlastppd(),700);
+  setTimeout(this.checkbatch(),800);
   //this.rotateprop;
-  this.Getmessages();
+  setTimeout(this.Getmessages(),500);
   this.timer = setInterval(this.getinterval, 3000)
     },
 
@@ -293,7 +293,7 @@ Getmessages(){
       this.Getmaintmode(this.$store.state.midMaintMode);
       setTimeout( ()=> {
     this.Getlockmode(this.$store.state.midLockMode);
-   }, 2000)
+   }, 100)  //this time must be small to refresh mode immediately
       setTimeout( ()=> {
        this.relock();
    }, 2000) 
@@ -313,7 +313,7 @@ Getmessages(){
  Getlockmode(mid){
     ReportService.getlockmode(mid).then(res => {
     this.lockmode = res.data[0].lockmode
-    console.log(this.lockmode);
+    console.log('ayLockmode : '+this.lockmode);
            })
       .catch(error => {
         console.error(error);
@@ -335,22 +335,14 @@ return;
 }  
 if (this.currentmessage.subcat !='CHO' & this.$store.state.sbatch[0].enddate!=null  & this.$store.state.sbatch[0].startdate !=null){
 alert('لابد من إدخال تشغيله جديده ');
-//  <router-link to="/chart" class="nav-link">Chart</router-link>
-//router.push({ path: '/batch' })
-//this.$router.push('/batch');
 this.$router.push('/batch');
-
-//window.location.replace('/batch'); 
 return
 }      
   if ( (this.currentmessage.subcat=='CLOSED'  ))  {
  if (this.$store.state.sbatch[0].startdate!=null  & this.$store.state.sbatch[0].enddate !=null){
        alert(('أدخل تشغيله جديده لبدايه العمل'))
         this.getbatches();
-        //router.push({ path: '/batch' })
         this.$router.push('/batch');
-               // window.location.replace('/batch'); 
-
         return;
         } 
   }
@@ -364,9 +356,7 @@ return
      this.getbatches();
     this.offon('true',this.$store.state.midDo0);
     this.Getmessages();
-    //router.push({ path: '/batch' })
     this.$router.push('/batch');
-    // window.location.replace('/batch'); 
    return;
     }  
  } 
@@ -375,9 +365,7 @@ return
     alert('Machine is OFF')
    return;
        }
-   setTimeout( ()=> {
-    this.Getmessages();
-   }, 1000)
+   setTimeout( ()=> {    this.Getmessages();   }, 1000)
 if  (!this.propmessages.length || this.countDown > 0  ) {
    return;
        }
@@ -389,7 +377,6 @@ var dateTime = date+' '+time;
 var d1= moment(String(this.lastppd)).format('YYYY-MM-DD');
 var d2= moment(String(dateTime)).format('YYYY-MM-DD')
 if (d1 !==d2){
- 
 //  alert(' must enter PPD !  ');
 //  return
 }
@@ -419,14 +406,15 @@ var data={
       
 
 if(confirm(' هل انت متاكد من انتهاء سبب التوقف '   +  data.id   +'  واستمرار العمل؟' ) ){
-       
+ this.offon('false',this.$store.state.midDo0);      
  let mytimer=this.$store.state.mtimer;;
  this.startcountDown(mytimer) ;
  setTimeout( ()=> {
       UserService.updateMessagesftime(data)
      .then(resp => {  }).catch(error => {console.log(error);});},mytimer*900)
 
-this.offon('false',this.$store.state.midDo0);
+
+
 setTimeout( ()=> {
     this.offon('true',this.$store.state.midDo4);
    }, mytimer*1000)
