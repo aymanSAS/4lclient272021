@@ -5,8 +5,10 @@
     <header >
        <br>
   </header>
-<div style="width:100%"  class="jumbotron" >   
-  
+<div style="width:100%"  class="jumbotron" >
+<!-- <h1>5L  RunTime: {{runtime5}}  </h1>
+<h1>5L stopTime: {{stoptime5}}  </h1>
+<h1> atf: {{atf}}  </h1> -->
 <button style="float: left;margin-top:20; margin-right:20px" type="button" class="btn btn-success" @click.prevent= "Getallmtime(1)">Last Month</button>
 <button style="float: left;margin-top:20; margin-right:120px" type="button" class="btn btn-success" @click.prevent= "Getallmtime(0)">Current Month</button>
 <!-- <button style="float: left;margin-top:20; margin-right:120px" type="button" class="btn btn-success" @click.prevent= "Getallmtime(2)">-2 Month</button>
@@ -17,21 +19,21 @@
 
 <downloadexcel
       class = "btn"
-       :header= "[$store.state.machineName+' Effieciency Report month  '+ lastMonth+'-'+y ,'PEI= ' + PEI]"  
+       :header= "[$store.state.machineName+' Effieciency Report month  '+ lastMonth+'-'+y ,'PEI= ' + PEI]"
        :title="['wwww']"
       :fetch   = "reportex"
       :fields = "json_fields"
       type    = "xls">
     <!-- <button  img ="images/excel1.png"  style="float: left;margin-top:20; margin-right:20px" type="button" class="btn btn-success"> Excel</button> -->
     <!-- <h3> Export Excel</h3> -->
-   <input type="image" src="images/excel1.png" alt="Excel" width="50" height="40"> 
+   <input type="image" src="images/excel1.png" alt="Excel" width="50" height="40">
        <!-- <button img src="excel1.png" >Download Excel </button> -->
     </downloadexcel>
 
       <br>
 
       <h2 > Effieciency Report {{lastMonth}}-{{y}}  </h2>
-        
+
 
 
       <div>
@@ -48,7 +50,91 @@
  <!-- <button style="float: left;margin-top:20; margin-right:20px" type="button" class="btn btn-success" @click.prevent= "Getallmtime(1)">Last Month</button>
  <button style="float: left;margin-top:20; margin-right:20px" type="button" class="btn btn-success" @click.prevent= "Getallmtime(0)">Current Month</button> -->
  <span> PEI :  {{PEI*100 | formatNumber}}  %</span>
-     <div style="width: 900px;width:100%"  class="jumbotron" >
+<!--  -->
+   <div style="width: 900px;width:100%"  class="jumbotron" >
+  <table name='tbl1' id='tbl1' class="table">
+    <thead class="thead-dark" >
+  <th scope="col"> Max </th>
+  <th scope="col"> Closed </th>
+  <th scope="col"> Avaiable </th>
+  <th scope="col"> Actual </th>
+  <th scope="col"> Quality Factor </th>
+  <th scope="col"> Multiplier </th>
+  <!-- <th scope="col">Off Time</th>
+  <th scope="col">On Time </th> -->
+      </thead>
+  <td>  {{max | formatNumber}} BBL</td>
+  <td>  {{CLOSED * BBL | formatNumber}} BBL</td>
+   <td>  {{available | formatNumber}} BBL</td>
+   <td>  {{(PPD || 0)| formatNumber}} BBL</td>
+ <td>  {{qf | formatNumber}} BBL </td>
+ <td>  {{BBL || 0}} BBL/hr</td>
+ <!-- <td>  {{offtime | formatNumber}} hr</td>
+   <td>  {{ontime | formatNumber}} hr</td> -->
+    </table>
+    </div>
+
+
+ <!--  -->
+ <!--  -->
+
+   <div style="width: 900px;width:100%"  class="jumbotron" >
+  <table name='tbl1' id='tbl1' class="table">
+    <thead class="thead-dark" >
+  <th scope="col">RCL</th>
+  <th scope="col"> LTC </th>
+  <th scope="col">Mechanical Reliability</th>
+  <th scope="col">External Fctor</th>
+  <th scope="col">RCL Human</th>
+  <th scope="col">Other RCL Human</th>
+      </thead>
+<td>  {{RCLTOTAL  | formatNumber  }} BBL
+
+  <br>
+       {{RCLTOTAL/BBL | formatNumber}} hr
+</td>
+
+<td>  {{LTC1 +LTC2 || 0}} BBL
+      <br>
+      {{LTC1 |formatNumber}}
+       + {{LTC2 |formatNumber}} BBL
+    </td>
+<td>  {{MR | formatNumber}} hrs</td>
+<td>  {{EF | formatNumber}} hrs</td>
+<td>  {{RCLHF | formatNumber}} hrs</td>
+<td>  {{RCLHFO | formatNumber}} hrs</td>
+
+    </table>
+    </div>
+
+
+ <!--  -->
+ <!--  -->
+   <div style="width: 900px;width:100%"  class="jumbotron" >
+  <table name='tbl1' id='tbl1' class="table">
+    <thead class="thead-dark" >
+<th scope="col">PCL</th>
+<th scope="col"> Planned Maintenance  </th>
+<th scope="col"> Other Planned Events </th>
+<th scope="col"> PCL Human </th>
+<th scope="col"> Change Over </th>
+<th scope="col"> CHO Count </th>
+      </thead>
+<td>  {{PCL | formatNumber}} BBL
+      <br>
+       {{PCL/BBL | formatNumber}} hr
+</td>
+<td>  {{PL | formatNumber}} hrs </td>
+<td>  {{OPL | formatNumber}} hrs </td>
+<td>  {{PCLHF | formatNumber}} hrs</td>
+<td>  {{CHO | formatNumber}} hrs </td>
+<td>  {{CHOcount || 0}} </td>
+    </table>
+    </div>
+
+
+ <!--  -->
+     <!-- <div style="width: 900px;width:100%"  class="jumbotron" >
   <table name='tbl1' id='tbl1' class="table">
     <thead class="thead-dark" >
       <th scope="col">RCL</th>
@@ -61,6 +147,7 @@
       <th scope="col"> Closed </th>
       <th scope="col"> Multiplier </th>
        <th scope="col"> LTC </th>
+
      <th scope="col"> CHO Count </th>
 
       </thead>
@@ -74,9 +161,14 @@
   <td>  {{available | formatNumber}} BBL</td>
   <td>  {{CLOSED * BBL | formatNumber}} BBL</td>
    <td>  {{BBL || 0}} BBL/hr</td>
-    <td>  {{LTC1 +LTC2 || 0}} BBL</td>
+    <td>  {{LTC1 +LTC2 || 0}} BBL
+      <br>
+      {{LTC1 |formatNumber}}
+       + {{LTC2 |formatNumber}} BBL
+    </td>
+
   <td>  {{CHOcount || 0}} </td>
- 
+
 
     </table>
     </div>
@@ -94,6 +186,7 @@
       <th scope="col"> Other Planned Events </th>
       <th scope="col"> PCL Human </th>
 
+
       </thead>
 
   <td>  {{MR | formatNumber}} hrs</td>
@@ -108,17 +201,17 @@
   <td>  {{PCLHF | formatNumber}} hrs</td>
 
     </table>
- </div>
- 
- 
+ </div> -->
+
+
  <table  class="table">
     <thead class="thead-dark" >
 
       <th scope="col">Manual Entry Production </th>
       <th scope="col">Actual+Manual Entry Production </th>
        <th scope="col">Rejected Production </th>
-      <th scope="col">Off Time</th>
-      <th scope="col">On Time </th>
+      <!-- <th scope="col">Off Time</th>
+      <th scope="col">On Time </th> -->
       <!-- <th scope="col">Run Time</th>
        <th scope="col">Stop Time</th> -->
            </thead>
@@ -126,16 +219,16 @@
   <td>  {{PPDmanual | formatNumber}} BBL</td>
   <td>  {{(PPDmanual+PPD) | formatNumber}} BBL</td>
   <td>  {{(PPD-PPDmanual) | formatNumber}} BBL</td>
-  <td>  {{offtime | formatNumber}} hr</td>
-   <td>  {{ontime | formatNumber}} hrs</td>
+  <!-- <td>  {{offtime | formatNumber}} hr</td>
+   <td>  {{ontime | formatNumber}} hrs</td> -->
   <!-- <td>  {{runtime | formatNumber}} hrs</td>
   <td>  {{stoptime | formatNumber}} hrs</td> -->
 
      </table>
- 
-       
+
+
      </div>
-     
+
        <!-- <div style="width: 900px;width:100%"  class="jumbotron" > -->
    <MessagesTable   :ays="content"  :cats="cats" :subcats="subcats"  :failures="failures" :tp1="tp1" :tp2="tp2" :tp3="tp3" />
     </div>
@@ -183,7 +276,10 @@ export default {
           'fdesc': 'fdesc',
           'Cat':'fcat',
            'Subcat':'fsubcat',
-      },  
+           'Run_ID':'runid',
+           'Product_Code':'productcode',
+           'Mode':'bbl',
+      },
       PPDmanual:'',
       offtime:'',
       ontime:'',
@@ -229,6 +325,9 @@ export default {
       LTC1:'',
       LTC2:'',
       CHOcount:'',
+      runtime5:'',
+      stoptime5:'',
+      atf:'',
     };
   },
    components:{
@@ -241,14 +340,15 @@ export default {
   this.Getallmtime(0);
   },
    mounted () {
-  this.GetBBL(this.$store.state.vardeleyMuliplier);
-  this.GetPPD(this.$store.state.vardelayCarton);
-  this.Getit(0);
-  this.Getallmtime(0);
-   }, 
+  // setTimeout(this.getRunStop(4,1),500);
+  setTimeout(this.GetBBL(this.$store.state.vardeleyMuliplier),500);
+  setTimeout(this.GetPPD(this.$store.state.vardelayCarton),500);
+  setTimeout(this.Getit(0),500);
+  setTimeout(this.Getallmtime(0),600);
+   },
 computed:{
 BBL2(){
-} , 
+} ,
 report11 () {
   var answer=[];
    const ff=  this.content.map(function(hobby) {
@@ -272,6 +372,27 @@ report11 () {
   },
 },
   methods:{
+    //new 12-8-2021 getRunstop
+  getRunStop(mode,m){
+  ReportService.getRunStop(mode,m).then(res => {
+    this.runtime5 = res.data[0].runtime  //
+    this.stoptime5 = res.data[0].stoptime;
+   // console.log(res.data[0]);
+           })
+      .catch(error => {
+        console.error(error);
+      });
+  },
+getatf(product){
+  ReportService.getatf(product).then(res => {
+    this.atf = res.data[0].atf //
+console.log(res.data);
+           })
+      .catch(error => {
+        console.error(error);
+      });
+  },
+
     reportex () {
    const gg=  this.content.map(function(hobby) {
     return {
@@ -287,8 +408,11 @@ report11 () {
         empno: hobby.empno,
         fdesc:hobby.fdesc,
         fcat :hobby.fcatcode,
-        fsubcat:hobby.fsubcat,  //Jams 
-       
+        fsubcat:hobby.fsubcat,  //Jams
+        runid:hobby.runid,
+        productcode:hobby.productcode,
+        bbl:hobby.bbl,
+
            }
         });
    return  gg
@@ -335,6 +459,7 @@ GetBBL(mid){
      },
 GetPPD(mid){
     ReportService.getmaintmode(mid).then(res => {
+    //  this.stoptime5= res.data[0]
     this.ppdconverter = res.data[0].maintmode
     console.log(this.maintmode);
            })
@@ -358,8 +483,8 @@ var columns = ['ID','Message','Date','Time','End Date','End Time','Period','Op C
 doc.addFileToVFS('Amiri-Regular.ttf',Amiri_Normal);
 doc.addFont('Amiri-Regular.ttf', 'custom', 'normal');
 doc.setFont('custom');
-  doc.autoTable({ 
-  
+  doc.autoTable({
+
    styles: {cellPadding: 0.5, fontSize: 8,font:'custom',fontStyle: 'normal',} ,
     columns,
     body:this.report11 ,
@@ -367,14 +492,16 @@ doc.setFont('custom');
     ,theme:'grid'
     , margin: {left: 1,right:1}
     ,headStyles: {fontSize: 8}
-    , styles: {cellPadding: 0.5, fontSize: 8} 
+    , styles: {cellPadding: 0.5, fontSize: 8}
       });
 
-//doc.setFontSize(12);   
+//doc.setFontSize(12);
 doc.save('R'+ this.lastMonth +'-' + this.y)
  },
 
  Getallmtime(m){
+this.getatf(this.$store.state.atfproduct) ;
+this.getRunStop(this.$store.state.specialmode,m);
  this.Getit(m);
 var today = new Date();
 var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -401,15 +528,7 @@ this.lastMonth=today.getMonth()+1-m;
       this.PPDmanual=res.data[0].PPDmanual * 0.00629;
       this.offtime=res.data[0].offtime;
       this.ontime=res.data[0].ontime;
-      this.runtime=res.data[0].runtime;
-      this.stoptime=res.data[0].stoptime;
-    this.tp1 = res.data[0].tp1   ///msecond/3600;
-    this.tp2 = res.data[0].tp2   ///msecond/3600;
-    this.tp3= res.data[0].tp3
-     this.qf=res.data[0].qf;
-    this.PCL=res.data[0].PCL *this.BBL  //fperiod fcatcode=PL
-    this.RCL=(res.data[0].RCL * this.BBL )+ this.qf;
-    this.HF3=this.tp3
+      this.runtime=res.data[0].runtime;this.MR
     //this.BBL=this.g1;
     this.EF=res.data[0].EF   //fperiod when fsubcat=EF
     this.CHO=res.data[0].CHO //fperiod ..fsubcat=CHO
@@ -420,13 +539,20 @@ this.lastMonth=today.getMonth()+1-m;
     this.PCLHF2=res.data[0].PCLHF2  //'tp3 fcatcode=PL'
      this.PCLHF= this.PCLHF1+ this.PCLHF2;
     this.RCLHF1=res.data[0].RCLHF1  //'tp1 fcatcode=REG'
-    this.RCLHF2=res.data[0].RCLHF2  //'tp3 fcatcode=REG' 
+    this.RCLHF2=res.data[0].RCLHF2  //'tp3 fcatcode=REG'
     this.RCLHF3=res.data[0].RCLHF3  //tp2 fcatcode=REG' when rejected   ...mreject=1
-    this.PPD=res.data[0].PPD *this.ppdconverter; 
+    this.PPD=res.data[0].PPD *this.ppdconverter;
     this.CHOcount= res.data[0].CHOcount;
     this.LTC1= res.data[0].CHOcount * 25;  //no of cho in the month * 25BBL for 4/5L machine
+    this.LTC2=this.runtime5 * 3.77   + this.atf *11.3     //5L mode * 3.77
 
-    
+/////
+//TC calculation for 1 liter in case of ATF products (multiply per factor 11.3).
+// LTC ( ramp up ramp down) :
+
+// change oil by hours count * 25.0 for 4/5 L machine
+
+// LTC (5L mode)                    : 5L mode running hours * 3.77
     this.MR=res.data[0].MR +res.data[0].Jams////////////- res.data[0].RCLHF3  ;........tp2 when reject=1 (maint mode ok)
     //this.RCLHF=this.RCLHF1 + this.RCLHF2 +this.RCLHF3 ; //+this.PCLHF1 + this.PCLHF2;..
 
@@ -465,48 +591,99 @@ this.PEI= this.PPD/(this.PPD+(this.RCLTOTAL));
      //
 generatepdf(){
 const doc = new jsPDF()
-doc.text('Performance Report ('+this.$store.state.machineName+'): '+ this.lastMonth +' / ' + this.y,15,15) ;
-doc.autoTable({
-  head: [['Multiplier ']],
-  body: [
-    [(this.BBL ) ],
-  ],
-})
+// var img = new Image();
+//       img.src = '@/images/8.JPEG';
+//       // const doc = new jsPDF({
+//       //   orientation: "portrait",
+//       //   // unit: "pt",
+//       //   format: [900, 1400]
+//       // });
+// doc.addImage(img, "JPEG", 20, 20);
+doc.text('Performance Report ('+this.$store.state.machineName+'): '+ this.lastMonth +' / ' + this.y,15,9 ) ;
 
 doc.autoTable({
-  head: [['RCL', 'PCL', 'PEI','LTC','CHO Count','CHO Time']],
+  // columnStyles: { 0: { halign: 'center', fillColor: [0, 255, 0] } }, // Cells in first column centered and green
+   //headStyles
+
+  margin: { top: 10 },
+  head: [['PEI ']],
   body: [
-    [numeral(this.RCLTOTAL).format("0.00") +' BBL', numeral(this.PCL ).format("0.00")+' BBL', (numeral(this.PEI *100 ).format("0.00")) +' %',numeral(this.LTC1+this.LTC2 ).format("0.00")+' BBL',this.CHOcount,numeral(this.CHO).format("0.00")+' hr'],
+    [((numeral(this.PEI *100 ).format("0.00")) +' %' ) ],
   ],
-})
- //
-doc.autoTable({
-  head: [['Quality-Factor', 'Max', 'Closed','Actual','Available']],
-  body: [
-    [numeral(this.qf ).format("0.00")+' BBL', numeral(this.max ).format("0.00") +' BBL', numeral(this.CLOSED * this.BBL ).format("0.00")+' BBL',numeral(this.PPD).format("0.00")+' BBL',numeral(this.available  ).format("0.00")],
-  ],
-})
-doc.autoTable({
-  head: [['Maintenance Reliability', 'External Factor', 'RCL by time','RCL Human','Other RCL Human']],
-  body: [
-    [numeral(this.MR ).format("0.00")+' BBL', numeral(this.EF ).format("0.00") +' BBL', numeral(this.RCL / this.BBL ).format("0.00")+' hr',numeral(this.RCLHF).format("0.00")+' hr',numeral(this.RCLHFO).format("0.00")+' hr'],
-    
-  ],
+  //   alternateRowStyles: { 0: { halign: 'center', fillColor: [0, 0, 0] } }, // Cells in first column centered and green
+
+  // styles: { fillColor: [255,219, 164] },
+  //  styles: { fillColor: [0,0, 0],textColor:[255,0, 255] },
+
 })
 //
 doc.autoTable({
-  head: [['Planned Maintenance', 'Other Planned Events', 'PCL Human']],
+  head: [['Max', 'Closed', 'Available','Actual','Quality-Factor' , 'Multiplier']],
   body: [
-    [(numeral(this.PL).format("0.00") )+' BBL', numeral(this.OPL  ).format("0.00") +' BBL', numeral(this.PCLHF ).format("0.00")+' hr'],
-   
+    [numeral(this.max ).format("0.00") +' BBL', numeral(this.CLOSED * this.BBL ).format("0.00")+' BBL',numeral(this.available  ).format("0.00"),numeral(this.PPD).format("0.00")+' BBL',numeral(this.qf ).format("0.00")+' BBL',this.BBL],
   ],
+ //styles: { fillColor: [0, 255, 0] },
 })
+//
 doc.autoTable({
-  head: [['Manual Entry', 'Actual + Manual', 'rejected','Off Time','On Time']],
+  head: [['RCL','RCL Time','LTC', 'Mechanical Reliability', 'External Factor','RCL Human','Other RCL Human']],
   body: [
-    [(numeral(this.PPDmanual).format("0.00") )+' BBL', numeral(this.PPD +this.PPDmanual).format("0.00") +' BBL', numeral(this.PPD-this.PPDmanual ).format("0.00")+' BBL',numeral(this.offtime).format("0.00")+' hr',numeral(this.ontime).format("0.00")+' hr'],
-   
+    [numeral(this.RCLTOTAL).format("0.00")+' BBL',numeral(this.RCLTOTAL/this.BBL).format("0.00")+'hr' ,numeral(this.LTC1+this.LTC2).format("0.00")+'BBL', +numeral(this.MR ).format("0.00")+' BBL',numeral(this.EF ).format("0.00") +' BBL',numeral(this.RCLHF).format("0.00")+' hr',numeral(this.RCLHFO).format("0.00")+' hr'],
   ],
+  // styles: { fillColor: [255, 0, 0] }, //red
+})
+//////////////////////////////////////////////////////////////////////
+
+doc.autoTable({
+  head: [['PCL','PCL Time','Planned Maintenance','Other Planned Events', 'PCL Human','CHO Count','CHO']],
+  body: [
+    [numeral(this.PCL ).format("0.00")+' BBL',numeral(this.PCL/this.BBL).format("0.00")+'hr' ,(numeral(this.PL).format("0.00") )+' BBL',numeral(this.OPL  ).format("0.00") +' BBL', numeral(this.PCLHF ).format("0.00")+' hr',this.CHOcount,numeral(this.CHO).format("0.00")+' hr']
+  ],
+ //styles: { fillColor: [0, 255, 0] }, //green
+})
+/////
+// doc.autoTable({
+//   head: [['Multiplier ']],
+//   body: [
+//     [(this.BBL ) ],
+//   ],
+// })
+
+// doc.autoTable({
+//   head: [['RCL', 'PCL', 'PEI','LTC','CHO Count','CHO Time']],
+//   body: [
+//     [numeral(this.RCLTOTAL).format("0.00") +' BBL', numeral(this.PCL ).format("0.00")+' BBL', (numeral(this.PEI *100 ).format("0.00")) +' %',numeral(this.LTC1+this.LTC2 ).format("0.00")+' BBL',this.CHOcount,numeral(this.CHO).format("0.00")+' hr'],
+//   ],
+// })
+//  //
+// doc.autoTable({
+//   head: [['Quality-Factor', 'Max', 'Closed','Actual','Available']],
+//   body: [
+//     [numeral(this.qf ).format("0.00")+' BBL', numeral(this.max ).format("0.00") +' BBL', numeral(this.CLOSED * this.BBL ).format("0.00")+' BBL',numeral(this.PPD).format("0.00")+' BBL',numeral(this.available  ).format("0.00")],
+//   ],
+// })
+// doc.autoTable({
+//   head: [['Maintenance Reliability', 'External Factor', 'RCL by time','RCL Human','Other RCL Human']],
+//   body: [
+//     [numeral(this.MR ).format("0.00")+' BBL', numeral(this.EF ).format("0.00") +' BBL', numeral(this.RCL / this.BBL ).format("0.00")+' hr',numeral(this.RCLHF).format("0.00")+' hr',numeral(this.RCLHFO).format("0.00")+' hr'],
+
+//   ],
+// })
+// //
+// doc.autoTable({
+//   head: [['Planned Maintenance', 'Other Planned Events', 'PCL Human']],
+//   body: [
+//     [(numeral(this.PL).format("0.00") )+' BBL', numeral(this.OPL  ).format("0.00") +' BBL', numeral(this.PCLHF ).format("0.00")+' hr'],
+
+//   ],
+// })
+doc.autoTable({
+  head: [['Manual Entry', 'Actual + Manual', 'rejected']], //,'Off Time','On Time'
+  body: [
+    [(numeral(this.PPDmanual).format("0.00") )+' BBL', numeral(this.PPD +this.PPDmanual).format("0.00") +' BBL', numeral(this.PPD-this.PPDmanual ).format("0.00")+' BBL'],  //,numeral(this.offtime).format("0.00")+' hr',numeral(this.ontime).format("0.00")+' hr'
+
+  ],
+  // styles: { fillColor: [58, 0, 2] },
 })
 doc.save('PR'+ this.lastMonth +'-' + this.y)
 },

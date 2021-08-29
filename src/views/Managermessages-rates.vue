@@ -81,10 +81,12 @@ export default {
           'ID': 'id',
           'Dtae': 'date',
          'Time': 'time',
-          'Count Rate': 'ppmcount',
-          'BBL Rate': 'ppmrate',
-          
-         
+          ' unit/hr ': 'ppmcount',
+          'Rate (BBL/hr)': 'ppmrate',
+           'Run ID': 'runid',
+            'Product Code': 'productcode',
+            'CHO': 'cho',
+
       },  
        PPDmanual:'',
       offtime:'',
@@ -173,8 +175,10 @@ report11 () {
         date: moment(String(hobby.date)).format('DD-MM-YYYY'),
         time:moment(String(hobby.date)).format('HH:mm:ss'),
         ppmcount: hobby.ppmcount,
-        ppmrate: hobby.ppmrate,
-        
+        ppmrate: hobby.ppmrate ,
+        runid:hobby.runid,
+        productcode:hobby.productcode,
+         cho:hobby.cho,
        
            }
         });

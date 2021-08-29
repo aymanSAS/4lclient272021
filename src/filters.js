@@ -29,15 +29,21 @@ Date.prototype.addHours= function(h){
 //
 Vue.filter('formatDateminus2h', function(value) {
   if (value) {
-    var foo = new moment(value).add(-2, 'h').toDate();  // add -2 hours to readjust time 
+    var foo = new moment(value).add(-2, 'h').toDate();  // add -2 hours to readjust time
     return moment(String(foo)).format('DD MMMM-YYYY HH:mm')
   }
 })
 //
 Vue.filter('formatDateonly', function(value) {
   if (value) {
-   // var foo = new moment(value).add(-2, 'h').toDate();  // add -2 hours to readjust time 
+   // var foo = new moment(value).add(-2, 'h').toDate();  // add -2 hours to readjust time
     return moment(String(value)).format('DD MMMM-YYYY')
+  }
+})
+Vue.filter('formatDateonly2', function(value) {
+  if (value) {
+   // var foo = new moment(value).add(-2, 'h').toDate();  // add -2 hours to readjust time
+    return moment(String(value)).format('DD MMMM-YYYY HH:mm')
   }
 })
 //

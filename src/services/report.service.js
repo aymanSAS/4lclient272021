@@ -29,14 +29,35 @@ getrates(){
  //
  getlastbatchnotend(){
   return axios.get(API_URL+`/lastbatchnotend`, { headers: authHeader() });
- } 
+ }
 //
 getmtimeC(mid,vid){
   return axios.get(API_URL+`/allmtimeC/${mid}/${vid}`, { headers: authHeader() });
  }
-//
+//    `/maintmode/${mid}`
+//   '/mintmod/'+mid
+
 getmaintmode(mid){
   return axios.get(API_URL+`/maintmode/${mid}`, { headers: authHeader() });
+ }
+ setmaintmode(new2){
+  return axios.get(API_URL+`/maintmodeu/${new2.mid}/${new2.val}`, { headers: authHeader() });
+ }
+ // getRunStop Api to get run time and stop time for mode
+ getRunStop(mode,m){
+  return axios.get(API_URL+`/getrunstop/${mode}/${m}`, { headers: authHeader() });
+ }
+ //
+ getatf(product){
+  return axios.get(API_URL+`/getatf/${product}`, { headers: authHeader() });
+ }
+ //
+ updatemode(mid){
+  return axios.post(API_URL+`/updatemode/${mid}`, { headers: authHeader() });
+ }
+ //////////
+ getallinbatch(id){
+  return axios.get(API_URL+`/ppdbyrun/${id}`, { headers: authHeader() });
  }
  ////
  getrunmode(mid){
@@ -59,18 +80,18 @@ delbatch(id){
   return axios.get(API_URL +`/delbatch/${id}`, { headers: authHeader() });
 }
   // getval(mid){
-  
+
   // this.getmaintmode(mid).then(res => {
   //  q1 = res.data[0].maintmode;
   //  alert(q1+'1st');
   //  return q1;
   //         })
   //   .catch(error => {
-  //     console.error(error);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+  //     console.error(error);
   //   });
   //   // alert(q1+'ffgg');
   //   // return q1;
-  
+
   //  }
  sendonoff(data){
   //return axios.post(API_URL +'/cat',data, { headers: authHeader() });  /${mid}/${val}`

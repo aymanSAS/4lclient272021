@@ -4,7 +4,7 @@
     <title>
   Ayman
       </title>
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <nav   v-show="checkComponent!='chart2' & checkComponent!='chart3' "  class="navbar navbar-expand navbar-dark bg-dark">
       <a href class="navbar-brand" @click.prevent>TYM  {{this.$store.state.machineName}}</a>
       <div class="navbar-nav mr-auto">
         <!-- <li class="nav-item">
@@ -19,7 +19,9 @@
          <li v-if="showAdminBoard  || showManagerBoard" class="nav-item">
           <router-link to="/chart" class="nav-link">Chart</router-link>
           </li>
-
+  <li v-if="showAdminBoard  || showManagerBoard" class="nav-item">
+          <router-link to="/chart2" class="nav-link">Dispaly</router-link>
+          </li>
          <li v-if="showAdminBoard || showOpBoard || showManagerBoard " class="nav-item">
           <router-link to="/ppd" class="nav-link">Product & QF</router-link>
           </li>
@@ -33,7 +35,7 @@
           <li v-if="showAdminBoard || showMaintBoard || showManagerBoard" class="nav-item">
           <router-link to="/maintmessages" class="nav-link">Maintenance Failures</router-link>
          </li>
-<li v-if="showAdminBoard || showOpBoard || showManagerBoard" class="nav-item">
+<li v-if="showAdminBoard  || showManagerBoard" class="nav-item">
           <router-link to="/batch" class="nav-link">Batches</router-link>
           </li>
 <div class="dropdown">
@@ -52,12 +54,12 @@
           </li>
          <li v-if="showAdminBoard " class="nav-item">
           <router-link style="color:black" to="/managermessages-rates" class="nav-link">Rates</router-link>
-          </li> 
-            
+          </li>
+
            <!-- <li v-if="showAdminBoard " class="nav-item">
           <router-link style="color:black" to="/register" class="nav-link">
             <font-awesome-icon icon="user-plus" /> Sign Up  </router-link>
-         
+
         </li> -->
   </div>
 </div>
@@ -70,7 +72,7 @@
           <h3 class="nav-link">4L Machine </h3> -->
           <!-- </li> -->
          <!-- //admin menue  -->
-         
+
 <div class="dropdown">
   <button  v-if="showAdminBoard " class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
   Configuration
@@ -88,10 +90,13 @@
           <li v-if="showAdminBoard " class="nav-item">
               <router-link style="color:black" to="/product" class="nav-link">Products</router-link>
           </li>
+            <li v-if="showAdminBoard " class="nav-item">
+              <router-link style="color:black" to="/target" class="nav-link">Targets</router-link>
+          </li>
            <!-- <li v-if="showAdminBoard " class="nav-item">
           <router-link style="color:black" to="/register" class="nav-link">
             <font-awesome-icon icon="user-plus" /> Sign Up  </router-link>
-         
+
         </li> -->
   </div>
 </div>
@@ -118,9 +123,6 @@
         </li> -->
         <!-- <li v-if="showAdminBoard" class="nav-item">
           <router-link to="/suppliers" class="nav-link">Suppliers</router-link>
-        </li> -->
-         <!-- <li v-if="showAdminBoard" class="nav-item">
-          <router-link to="/emp" class="nav-link">Employees</router-link>
         </li> -->
          <!-- <li v-if="showAdminBoard" class="nav-item">
           <router-link to="/departments" class="nav-link">Departments</router-link>
@@ -166,24 +168,25 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div :class="{'container':(checkComponent!='chart2' & checkComponent!='chart3') }" >
 
       <router-view />
     </div>
-<div class="sidenav">
+<div class="sidenav"  v-show="checkComponent!='chart2' & checkComponent!='chart3' ">
 <button v-if= "(runmode==1)" class="btn btn-success" style='width:100%'>On</button>
 <button v-if= "(runmode==0)" class="btn btn-danger" style='width:100%'>Off</button>
 <br>
 <br>
 
- <h6 class="mody"> Last_Rate : {{lastrate / 5 }} unit/minute </h6>
+ <!-- <h6 class="mody"> Last_Rate : {{(lastrate ) }} unit/hr </h6> -->
 
- <h6 class="mody" > ----------------> {{lastratebbl | formatNumber }} BBL/hr </h6>
-<br>
-   <h6 class="mody"> Online_Rate : {{onlinerate || 0}}  unit/minute </h6>
 
-<h6 class="mody"> ----------------> {{(onlineratebbl || 0) | formatNumber }}  BBL/hr </h6>
 <br>
+   <h6 class="mody"> Online_Rate : {{(onlinerate) || 0}}  unit/hr </h6>
+
+<h6 class="mody"> ----------------> {{((onlineratebbl) || 0) | formatNumber }}  BBL/hr </h6>
+<br>
+
 
  <h6 v-if=" typeof mybatch[0] != 'undefined' " class="mody"> Run ID : {{(mybatch[0].runid )||0 }}   </h6>
 <br>
@@ -195,8 +198,8 @@
 <h6 class="mody">Run Period: {{(period ) | formatNumber  }} hr  </h6>
 <br>
        </div>
-    </div>  
-         
+    </div>
+
 </template>
 
 <script>
@@ -207,6 +210,8 @@ return{
   connection:null,
   message:'',
   mode:'',
+  timer1:'',
+  timer2:'',
   lastrate:'',
   onlinerate:'',
    lastratebbl:'',
@@ -241,16 +246,25 @@ created(){
 //this.swmode();
 },
 beforeMount() {
-  this.swmode();
-  this.getrates();
-   this.timer = setInterval(this.swmode, 5000)
+ // this.swmode();
+ // this.getrates();
+ // this.timer1 = setInterval(this.swmode, 15000)
   //this.timer = setInterval(this.Getrunmode(5),2000)
-  this.timer = setInterval(this.getrates, 60000)
+ // this.timer2 = setInterval(this.getrates, 80000)
+},
+beforDestroyed(){
+clearInterval(this.timer1);
+clearInterval(this.timer2);
 },
 mounted (){
-
+   //setTimeout(this.Getrunmode(5),150);
+  setTimeout(this.swmode(),400);
+  setTimeout(this.getrates(),800);
+  this.timer1 = setInterval(this.swmode, 15000)
+  //this.timer = setInterval(this.Getrunmode(5),2000)
+  this.timer2 = setInterval(this.getrates, 60000)
   //this.getrates();
- 
+
 },
   computed: {
     currentUser() {
@@ -263,6 +277,10 @@ mounted (){
 
       return false;
     },
+  checkComponent(){
+     return this.$route.name;
+       },
+
      showHrBoard() {
       if (this.currentUser && this.currentUser.roles) {
         return this.currentUser.roles.includes('ROLE_HR');
@@ -311,9 +329,9 @@ showManagerBoard() {
       this.$store.dispatch('auth/logout');
       this.$router.push('/login');
     },
-   
+
    swmode(){
-  
+
   ReportService.getlastmode().then(result => {
      if ( result.data[0] !== undefined){
      this.mybatch = result.data;
@@ -322,16 +340,26 @@ showManagerBoard() {
            })
       .catch(error => {
         console.error(error);
-      });  
- 
- 
-    this.Getrunmode(this.$store.state.midDo4);
+      });
+
+
+   // this.Getrunmode(this.$store.state.midDo4);
+  ReportService.getlockmode(this.$store.state.midDo4).then(res => {
+    this.runmode = res.data[0].lockmode
+           })
+      .catch(error => {
+        console.error(error);
+      });
+
+
+
+   //
 
   ReportService.getlastmode().then(res => {
     if ( res.data[0]  !== undefined){
     this.mode = res.data[0].mode   ;
     let d1=new Date(res.data[0].startdate);
-   let d2=  new Date(); 
+   let d2=  new Date();
    var diff = (Math.abs(d2 - d1))/60000/60;
    this.period=diff;
     }
@@ -349,11 +377,10 @@ chotime() {
     // this.getlastbatch();
       }
      return diff;
-    },    
+    },
   Getrunmode(mid){  //getlockmode
     ReportService.getlockmode(mid).then(res => {
     this.runmode = res.data[0].lockmode
-    //console.log(this.maintmode);
            })
       .catch(error => {
         console.error(error);
@@ -361,7 +388,7 @@ chotime() {
      },
 ////////////
    getrates(){
-  
+
 
   ReportService.getrates().then(res => {
     this.lastrate = res.data[0].lastrate   ;
@@ -380,14 +407,14 @@ if (this.mode==4 ) {
   }
 ReportService.letmode(data)
      .then(resp => {
-       
+
        })
       .catch(error => {
         console.log(error);
       }).then(()=>{
     this.swmode();
-      }); 
-    
+      });
+
 }
 
   },

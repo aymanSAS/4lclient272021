@@ -90,10 +90,26 @@
     -->
 
 <!--  -->
+<!-- <Dropdown
+    :options=allproducts
+    
+    placeholder="Please select an option">
+</Dropdown> -->
+ <!-- <model-select :options="arproducts"
+                 v-model="item"
+                placeholder="select item2">
+</model-select>
+ <model-list-select :list="arproducts"
+                     v-model="item"
+                     option-value="id"
+                     option-text="desc"
+                     placeholder="select item">
+  </model-list-select> -->
+
   <button style="margin-left:400px; margin-bottom:15px;" type="button" class="btn btn-warning" @click.prevent= "updateit(1)">إنهاء التشغيله ومتابعه العمل </button>
   <button style="margin-left:40px; margin-bottom:15px;" type="button" class="btn btn-danger" @click.prevent= "updateit(2)">إنهاء التشغيله ونهايه اليوم</button>
 
-   <div v-if=" typeof propcats[0] !='undefined'">
+   <div v-if=" typeof propcats[0] !== 'undefined' " >
 <table  v-if=" propcats[0].enddate == null " id='batchtable' ref="batchtable"  class="table">
     <thead class="thead-dark" >
       <th scope="col">ID</th>
@@ -140,6 +156,9 @@
 </div>
 </template>
 <script>
+import Dropdown from 'vue-simple-search-dropdown';
+import { ModelSelect } from 'vue-search-select'
+import { ModelListSelect } from 'vue-search-select'
 
 import UserService from "../services/user.service";
 import ReportService from "../services/report.service";
@@ -156,14 +175,28 @@ export default {
   allcats:'',
   lastbatch:'',
   allproducts:'',
+  item:'',
   ay1:'',
   //ss:'',
  };
  
 },
+ components:{
+  Dropdown,ModelSelect,ModelListSelect
+  },
 props:["ays"] ,
 computed:{
-  
+   selectFromParentComponent1 () {
+        // select option from parent component
+        this.item = this.arproducts[0]
+      },   
+  arproducts(){
+  var ar1=[];
+   //ar1=this.allproducts
+   for(var i in this.allproducts)
+    ar1.push([i, ar1 [i]]);
+return ar1;
+  },
  rotateprop:function(){
    let vm =this
     vm.propcats=vm.ays;
@@ -187,7 +220,7 @@ ss:function(){
 
   },
  created(){
- 
+ this.getbatches();
 
  //this.rotateprop;
  },
@@ -196,11 +229,11 @@ ss:function(){
 
 //console.log(this.$store.state.user2.username);
 // this.rotateprop();
-this.getbatches();
+ //this.getbatches();
 
   //this.getbatches();
   //this.rotateprop;
-   this.GetProducts();
+   setTimeout(this.GetProducts(),400);
  // this.selectRow(this.propcats[0].id,this.propcats[0].runid,this.propcats[0].startdate,this.propcats[0].enddate,this.propcats[0].mode,this.propcats[0].bachid,this.propcats[0].sapid,this.propcats[0].productcode)
   // //this.startInterval();
   //  this.timer = setInterval(this.Getmessages, 10000)
@@ -217,6 +250,13 @@ this.getbatches();
    this.currentcat.sapid = sapid;
    //this.currentcat.empno = empno;
     },
+ reset () {
+        this.item = {}
+      },
+   //   selectFromParentComponent1 () {
+        // select option from parent component
+   //     this.item = this.arproducts[0]
+    //  },   
       changefcode(code){
       //console.log(this.currentcat.catcode);
       this.currentcat.productcode=code;
@@ -257,7 +297,9 @@ if (!this.currentcat.id && this.currentcat.runid && this.currentcat.mode && this
 ReportService.letmode(data1).then(res => {
          }).catch(error => {console.log(error)}).then(res=>{this.getbatches();})
      // window.location.replace('/messages'); 
-      this.$router.push('/messages');   
+     setTimeout(this.swmode(),500);
+      window.location.replace('/messages');
+      //this.$router.push('/messages');   
  }
  else{
    alert('Not Permit');
@@ -288,7 +330,30 @@ if (!this.$refs.id.value){
    alert('Not Permit');
  }
 },
+swmode(){
+  ReportService.getlastmode().then(result => {
+     if ( result.data[0] !== undefined){
+     this.mybatch = result.data;
+     this.$store.state.sbatch=this.mybatch;
+     }
+           })
+      .catch(error => {
+        console.error(error);
+      });  
+ 
+ 
+    this.Getrunmode(this.$store.state.midDo4);
 
+  ReportService.getlastmode().then(res => {
+    if ( res.data[0]  !== undefined){
+    this.mode = res.data[0].mode   ;
+    let d1=new Date(res.data[0].startdate);
+   let d2=  new Date(); 
+   var diff = (Math.abs(d2 - d1))/60000/60;
+   this.period=diff;
+    }
+      });
+  },
  getbatches(){
     //  this.rotateprop;
     var vm=this;
@@ -341,6 +406,15 @@ if (!this.$refs.id.value){
 //         console.error(error);
 //       });
 //       },
+Getrunmode(mid){  //getlockmode
+    ReportService.getlockmode(mid).then(res => {
+    this.runmode = res.data[0].lockmode
+    //console.log(this.maintmode);
+           })
+      .catch(error => {
+        console.error(error);
+      });
+     },
 updateit(close){
 if (!this.currentcat.id){
 alert ('Please choose run from table')  
@@ -367,8 +441,10 @@ console.log(data);
       .catch(error => {
         console.log(error);
       }).then(result=> {this.newBatch()});
-// window.location.replace('/messages');
- this.$router.push('/messages');
+
+ setTimeout(this.swmode(),1000);
+  window.location.replace('/messages');
+ //setTimeout(this.$router.push('/messages'),2000);
  },
 },
 }

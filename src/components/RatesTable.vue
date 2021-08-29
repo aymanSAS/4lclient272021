@@ -15,12 +15,12 @@
     <thead class="thead-dark" >
       <th scope="col">id</th>
       <th scope="col">Date</th>
-      <th scope="col">Count Rate</th>
-      <th scope="col">BBL Rate</th>
-      <!-- <th scope="col">Mode</th>
+      <th scope="col">unit/hr</th>
+      <th scope="col">Rate (BBL/hr)</th>
+       <th scope="col">Mode</th>
       <th scope="col">Run ID</th>
-      <th scope="col">Product ID</th> -->
-     
+      <th scope="col">Product ID</th> 
+      <th scope="col">CHO</th> 
 
 </thead>
 
@@ -35,17 +35,20 @@
     {{message.ppmcount}} 
     </td>
     <td>
-    {{message.ppmrate}}
+    {{message.ppmrate }}
     </td>
-    <!-- <td>
+    <td>
     {{message.bbl }}
-    </td> -->
-    <!-- <td>
+    </td> 
+     <td>
     {{message.runid }}
     </td>
       <td>
     {{message.productcode }}
-    </td> -->
+    </td> 
+      <td>
+    {{message.cho }}
+    </td> 
 </tr>
 
 </table>

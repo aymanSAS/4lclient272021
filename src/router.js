@@ -67,6 +67,11 @@ export const router = new Router({
       component: () => import("./views/product.vue")
     },
     {
+      path: "/target",
+      name: "target",
+      component: () => import("./views/target.vue")
+    },
+    {
       path: "/cats",
       name: "cats",
       // lazy-loaded
@@ -89,12 +94,23 @@ export const router = new Router({
       name: "chart",
       component: () => import("./views/Chartm.vue")
     },
+    {
+      path: "/chart2",
+      name: "chart2",
+      component: () => import("./views/Chartm2.vue")
+    },
+    {
+      path: "/chart3",
+      name: "chart3",
+      component: () => import("./views/Chartm3.vue")
+    },
     //
     {
       path: "/ppd",
       name: "ppd",
       component: () => import("./views/Ppd.vue")
     },
+
     ///
     {
       path: "/maintmessages",

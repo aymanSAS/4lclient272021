@@ -123,8 +123,12 @@ export default {
   this.rotateprop;
   this.Getmessages();
   //this.startInterval();
-   this.timer = setInterval(this.Getmessages, 600)
+   this.timer = setInterval(this.Getmessages, 36000)
     },
+    beforDestroyed(){
+clearInterval(this.timer);
+
+},
   computed:{
    rotateprop:function(){
      this.propmessages=this.ays;
@@ -159,6 +163,7 @@ export default {
     this.content = res.data;
            })
       .catch(error => {
+        this.$router.go(0);
         console.error(error);
       });
       },
